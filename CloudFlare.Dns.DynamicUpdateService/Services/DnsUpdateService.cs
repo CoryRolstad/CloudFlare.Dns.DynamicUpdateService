@@ -38,7 +38,7 @@ namespace CloudFlare.Dns.DynamicUpdateService.Services
         {
             while (!stoppingToken.IsCancellationRequested)
             {
-                _logger.LogInformation($"{DateTimeOffset.Now}: DnsUpdateService Starting Execution");
+                _logger.LogInformation($"\n{DateTimeOffset.Now}: DnsUpdateService Starting Execution");
 
                 IPAddress currentIpAddress; 
                 // Get External IP Address
@@ -46,6 +46,7 @@ namespace CloudFlare.Dns.DynamicUpdateService.Services
                 try
                 {
                     currentIpAddress = await _ipService.GetExternalIpv4();
+                    _logger.LogInformation($"{DateTimeOffset.Now}: Current External IP: {currentIpAddress.ToString()}"); 
                 }
                 catch (WebException ex)
                 {
@@ -62,8 +63,9 @@ namespace CloudFlare.Dns.DynamicUpdateService.Services
                 foreach(string hostname in hostnames)
                 {
                     foreach(IPAddress ip in await System.Net.Dns.GetHostAddressesAsync(hostname.Trim()))
-                    {                        
-                        if(!currentIpAddress.Equals(ip))
+                    {
+                        _logger.LogInformation($"{DateTimeOffset.Now}: {hostname.Trim()} has an IP: {ip}");
+                        if (!currentIpAddress.Equals(ip))
                         {
                             _logger.LogInformation($"{DateTimeOffset.Now}: {hostname.Trim()} is {ip.ToString()} but our local IP is {currentIpAddress.ToString()} adding {hostname.Trim()} to the list to be updated");
                             hostnamesToUpdate.Add(hostname.Trim()); 
