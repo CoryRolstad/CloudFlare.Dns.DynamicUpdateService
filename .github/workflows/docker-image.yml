@@ -29,6 +29,4 @@ jobs:
         uses: docker/build-push-action@v2.7.0
         with:
           push: true
-          tags: |
-            oldgrandpavanu/cloudflarednsupdateservice:latest
-            oldgrandpavanu/cloudflarednsupdateservice:${{steps.version.outputs.date}}
+          tags: oldgrandpavanu/cloudflarednsupdateservice:latest, oldgrandpavanu/cloudflarednsupdateservice:${{ steps.date.outputs.date }}
