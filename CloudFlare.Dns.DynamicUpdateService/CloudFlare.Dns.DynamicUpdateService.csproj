@@ -7,8 +7,8 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="CloudFlare.Client" Version="5.0.1" />
-    <PackageReference Include="Ipify.GetMyIpAddress" Version="1.1.1" />
+    <PackageReference Include="CloudFlare.Client" Version="6.0.1" />
+    <PackageReference Include="Ipify" Version="1.0.1" />
     <PackageReference Include="Microsoft.Extensions.Hosting" Version="5.0.0" />
     <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.10.13" />
     <PackageReference Include="System.Configuration.ConfigurationManager" Version="5.0.0" />

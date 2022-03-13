@@ -1,7 +1,6 @@
 ﻿using CloudFlare.Client;
 using CloudFlare.Client.Api.Authentication;
 using CloudFlare.Dns.DynamicUpdateService.Models;
-using Ipify.GetMyIpAddress;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
@@ -19,13 +18,11 @@ namespace CloudFlare.Dns.DynamicUpdateService.Services
     public class DnsUpdateService : BackgroundService
     {
         private ILogger<DnsUpdateService> _logger;
-        private IIpService _ipService;
         private DynamicUpdateSettings _dynamicUpdateSettings;
         private readonly IAuthentication _authentication; 
-        public DnsUpdateService(ILogger<DnsUpdateService> logger, IIpService ipService, IOptions<DynamicUpdateSettings> dynamicUpdateSettings)
+        public DnsUpdateService(ILogger<DnsUpdateService> logger, IOptions<DynamicUpdateSettings> dynamicUpdateSettings)
         {
             _logger = logger ?? throw new ArgumentNullException($"{nameof(logger)} cannot be null");
-            _ipService = ipService ?? throw new ArgumentNullException($"{nameof(ipService)} cannot be null");
             if (dynamicUpdateSettings == null)
                 throw new ArgumentNullException($"{nameof(dynamicUpdateSettings)} cannot be null");
             if (dynamicUpdateSettings.Value == null)
@@ -45,12 +42,22 @@ namespace CloudFlare.Dns.DynamicUpdateService.Services
                 // TODO: Collect external ip from multiple sources to ensure we are not single threaded on depedencies
                 try
                 {
-                    currentIpAddress = await _ipService.GetExternalIpv4();
+                    currentIpAddress = System.Net.IPAddress.Parse(await Ipify.IpifyIp.GetPublicIpAsync());
                     _logger.LogInformation($"{DateTimeOffset.Now}: Current External IP: {currentIpAddress.ToString()}"); 
                 }
                 catch (WebException ex)
                 {
                     _logger.LogError($"{DateTimeOffset.Now}: {typeof(WebException)} was thrown, {ex.Message}");
+                    return;
+                }
+                catch (ArgumentNullException ex)
+                {
+                    _logger.LogError($"{DateTimeOffset.Now}: {typeof(ArgumentNullException)} was thrown, {ex.Message}");
+                    return;
+                }
+                catch (FormatException ex)
+                {
+                    _logger.LogError($"{DateTimeOffset.Now}: {typeof(FormatException)} was thrown, {ex.Message}");
                     return;
                 }
 

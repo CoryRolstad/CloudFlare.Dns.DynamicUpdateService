@@ -1,6 +1,5 @@
 using CloudFlare.Dns.DynamicUpdateService.Models;
 using CloudFlare.Dns.DynamicUpdateService.Services;
-using Ipify.GetMyIpAddress;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -10,7 +9,7 @@ namespace CloudFlare.Dns.DynamicUpdateService
 {
     public class Program
     {
-        public static async Task Main(string[] args)
+        public static void Main(string[] args)
         {
             CreateHostBuilder(args).Build().Run();
         }
@@ -25,7 +24,6 @@ namespace CloudFlare.Dns.DynamicUpdateService
                 .ConfigureServices((hostContext, services) =>
                 {
                     services.AddOptions();
-                    services.AddIpService(hostContext.Configuration.GetSection("IpServiceSettings").Get<IpServiceSettings>());
                     services.Configure<DynamicUpdateSettings>(hostContext.Configuration.GetSection("DynamicUpdateSettings"));
                     services.AddHostedService<DnsUpdateService>();
                 });
