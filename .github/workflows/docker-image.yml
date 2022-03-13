@@ -25,4 +25,4 @@ jobs:
         uses: docker/build-push-action@v2
         with:
           push: true
-          tags: oldgrandpavanu/cloudflarednsupdateservice:1.0.${{date +%s}}
+          tags: oldgrandpavanu/cloudflarednsupdateservice:$(date +%s)
