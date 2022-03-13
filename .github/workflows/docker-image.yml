@@ -22,9 +22,9 @@ jobs:
           password: ${{ secrets.DOCKERHUB_TOKEN }}
       -
         name: Build and push
-        uses: docker/build-push-action@v2
+        uses: docker/build-push-action@v2.7.0
         with:
           push: true
           tags: |
             oldgrandpavanu/cloudflarednsupdateservice:latest
-            oldgrandpavanu/cloudflarednsupdateservice:1.0.0
+            oldgrandpavanu/cloudflarednsupdateservice:${{steps.version.outputs.date_version}}
