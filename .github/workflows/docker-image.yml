@@ -27,4 +27,4 @@ jobs:
           push: true
           tags: |
             oldgrandpavanu/cloudflarednsupdateservice:latest
-            oldgrandpavanu/cloudflarednsupdateservice:${{ steps.version.outputs.date_version }}
+            oldgrandpavanu/cloudflarednsupdateservice:1.0.0
